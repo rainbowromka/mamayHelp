@@ -39,11 +39,11 @@ public class blog {
         this.textBlog = textBlog;
     }
 
-    public int getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
-    }
+//    public int getIdUser() {
+//        return idUser;
+//    }
+//
+//    public void setIdUser(int idUser) {
+//        this.idUser = idUser;
+//    }
 }
