@@ -1,6 +1,6 @@
-package http.mamay.help.mamayHelp.dataBase;
+package http.mamay.help.mamayHelp.dataBase.entities;
 
-public class MenuItem {
+public class Category {
     private String name;
     private String url;
 
@@ -20,8 +20,7 @@ public class MenuItem {
         this.url = url;
     }
 
-    public MenuItem(String name, String url) {
-
+    public Category(String name, String url) {
         this.name = name;
         this.url = url;
     }

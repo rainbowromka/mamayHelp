@@ -105,12 +105,8 @@ $(document).ready(function () {
                 <form action="#" id="mobile-nav" class="visible-phone">
                     <div class="mobile-nav-select">
                         <select onchange="window.open(this.options[this.selectedIndex].value,'_top')">
-                            <option value="">Navigate...</option>
-                            <option value="index.htm">Главная</option>
-                            <option value="guide.htm">Справочник</option>
-                            <option value="map.htm">Карта</option>
-                            <option value="picture.htm">Галлерея</option>
-                            <option value="contact.htm">Контакты</option>
+                            <option value="">Навигация...</option>
+                            <option th:each="menu : ${menuItems}" th:value="${menu.url}" th:text="${menu.name}">Главная</option>
                         </select>
                     </div>
                 </form>
@@ -126,8 +122,7 @@ $(document).ready(function () {
             <div class="span8">
                 <div class="flexslider">
                     <ul class="slides">
-                        <li><a href="gallery-single.htm"><img src="img/gallery/slide2.jpg" alt="slider" /></a></li>
-                        <li><a href="gallery-single.htm"><img src="img/gallery/slide1.jpg" alt="slider" /></a></li>
+                        <li th:each="slider : ${sliders}"><a th:href="${slider.url}"><img th:src="${slider.src}" alt="slider" /></a></li>
                     </ul>
                 </div>
             </div>
@@ -140,7 +135,9 @@ $(document).ready(function () {
                 <p class="lead" th:text="${mamayWelcome}" />
                 <a href="#"><i class="icon-plus-sign"></i>Читать дальше</a>
             </div>
-        </div><!-- End Headline -->
+        </div>
+
+        <!-- End Headline -->
     
         <div class="row"><!-- Begin Bottom Section -->
         
@@ -159,51 +156,31 @@ $(document).ready(function () {
                     <!-- Carousel items -->
                     <div class="carousel-inner">
 
-                         <!-- Blog Item 1 -->
-                        <div class="active item">
-                            <a href="blog-single.htm"><img src="img/gallery/blog-med-img-1.jpg" alt="" class="align-left blog-thumb-preview" /></a>
+
+                        <!--Blog Item 1-->
+                        <div th:each="topBlog : ${topBlogs}" th:class="((${topBlogStat.first}) ? 'active item post-content' : 'post-content item')">
+                            <a th:href="${topBlog.urlSingle}"><img th:src="${topBlog.tumbs.content}" alt="" class="align-left blog-thumb-preview" /></a>
                             <div class="post-info clearfix">
-                                <h4><a href="blog-single.htm">A subject that is beautiful in itself</a></h4>
+                                <h4><a th:href="${topBlog.urlSingle}" th:text="${topBlog.title}">A subject that is beautiful in itself</a></h4>
                                 <ul class="blog-details-preview">
-                                    <li><i class="icon-calendar"></i><strong>Posted on:</strong> Sept 4, 2015<li>
-                                    <li><i class="icon-user"></i><strong>Posted by:</strong> <a href="#" title="Link">Admin</a><li>
-                                    <li><i class="icon-comment"></i><strong>Comments:</strong> <a href="#" title="Link">12</a><li>
-                                    <li><i class="icon-tags"></i> <a href="#">photoshop</a>, <a href="#">tutorials</a>, <a href="#">illustration</a>
+                                    <li>
+                                        <i class='icon-calendar'></i>
+                                        <strong>Дата:</strong>
+                                        <span th:text="${topBlog.posted}"></span>
+                                    <li>
+                                    <li><i class="icon-user"></i><strong>Автор:</strong> <a href="#" title="Link" th:text="${topBlog.author.name}">Admin</a><li>
+                                    <li><i class="icon-comment"></i><strong>Comments:</strong> <a href="#" title="Link" th:text="${topBlog.comments.size()}">12</a><li>
+                                    <li>
+                                        <i class="icon-tags"></i>
+                                        <span th:each="tag : ${topBlog.tags}">
+                                            <a href="#" th:text="${tag.tag}">photoshop</a>
+                                            &nbsp
+                                        </span>
+                                    </li>
                                 </ul>
                             </div>
-                            <p class="blog-summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In interdum felis fermentum ipsum molestie sed porttitor ligula rutrum. Vestibulum lectus tellus, aliquet et iaculis sed, volutpat vel erat. <a href="#">Read more</a><p>
+                            <p class="blog-summary"><span th:text="${topBlog.annotation}"></span><a href="#">Дальше</a><p>
                         </div>
-
-                        <!-- Blog Item 2 -->
-                         <div class="item">
-                            <a href="blog-single.htm"><img src="img/gallery/blog-med-img-1.jpg" alt="" class="align-left blog-thumb-preview" /></a>
-                            <div class="post-info clearfix">
-                                <h4><a href="blog-single.htm">A great artist is always before his time</a></h4>
-                                <ul class="blog-details-preview">
-                                    <li><i class="icon-calendar"></i><strong>Posted on:</strong> Sept 4, 2015<li>
-                                    <li><i class="icon-user"></i><strong>Posted by:</strong> <a href="#" title="Link">Admin</a><li>
-                                    <li><i class="icon-comment"></i><strong>Comments:</strong> <a href="#" title="Link">12</a><li>
-                                    <li><i class="icon-tags"></i> <a href="#">photoshop</a>, <a href="#">tutorials</a>, <a href="#">illustration</a>
-                                </ul>
-                            </div>
-                            <p class="blog-summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In interdum felis fermentum ipsum molestie sed porttitor ligula rutrum. Vestibulum lectus tellus, aliquet et iaculis sed, volutpat vel erat. <a href="#">Read more</a><p>
-                        </div>
-
-                         <!-- Blog Item 3 -->
-                         <div class="item">
-                            <a href="blog-single.htm"><img src="img/gallery/blog-med-img-1.jpg" alt="" class="align-left blog-thumb-preview" /></a>
-                            <div class="post-info clearfix">
-                                <h4><a href="blog-single.htm">Is art everything to anybody?</a></h4>
-                                <ul class="blog-details-preview">
-                                    <li><i class="icon-calendar"></i><strong>Posted on:</strong> Sept 4, 2015<li>
-                                    <li><i class="icon-user"></i><strong>Posted by:</strong> <a href="#" title="Link">Admin</a><li>
-                                    <li><i class="icon-comment"></i><strong>Comments:</strong> <a href="#" title="Link">12</a><li>
-                                    <li><i class="icon-tags"></i> <a href="#">photoshop</a>, <a href="#">tutorials</a>, <a href="#">illustration</a>
-                                </ul>
-                            </div>
-                            <p class="blog-summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In interdum felis fermentum ipsum molestie sed porttitor ligula rutrum. Vestibulum lectus tellus, aliquet et iaculis sed, volutpat vel erat. <a href="#">Read more</a><p>
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -212,8 +189,8 @@ $(document).ready(function () {
             ================================================== -->
             <div class="span6">
 
-                <h5 class="title-bg">Наши друзья о мамае
-                    <small>которые любят горы</small>
+                <h5 class="title-bg">Мамай это...
+                    <!--<small></small>-->
                     <button id="btn-client-next" class="btn btn-inverse btn-mini" type="button">&raquo;</button>
                     <button id="btn-client-prev" class="btn btn-inverse btn-mini" type="button">&laquo;</button>
                 </h5>
@@ -223,33 +200,15 @@ $(document).ready(function () {
                 <!-- Carousel items -->
                 <div class="carousel-inner">
 
-                    <div class="active item">
+                    <div th:each="review : ${userReviews}" class="active item" th:class="((${reviewStat.first}) ? 'active item' : 'item')">
                         <p class="quote-text">
-                            "Мамай это - мекка прибайкальского фрирайда. Снега тут выпадает за сезон до 5 метров. Самая крутая катка ноябрь-декабрь, если Байкал замерзнет позже, еще можно покататься отлично в январе. Впрочем кататься тут можно до апреля включительно"
-                            <cite>- Роман Перминов, поселок Мамай</cite>
+                            <span  th:text="${review.reviewText}"></span>
+                            <cite th:text="${review.user.name} +', ' + ${review.user.location}">- Роман Перминов, поселок Мамай</cite>
                         </p>
                     </div>
 
-                    <div class="item">
-                        <p class="quote-text">"Adipiscing elit. In interdum felis fermentum ipsum molestie sed porttitor ligula rutrum. Morbi blandit ultricies ultrices. Vivamus nec lectus sed orci molestie molestie."
-                            <cite>- Another Client Name, Company Name</cite></p>
-                    </div>
-
-                    <div class="item">
-                        <p class="quote-text">"Mauris eget tellus sem. Cras sollicitudin sem eu elit aliquam quis condimentum nulla suscipit. Nam sed magna ante. Ut eget suscipit mauris."<cite>- On More Client, The Company</cite></p>
-                    </div>
-
                 </div>
                 </div>
-
-                <!-- Client Logo Thumbs-->
-                <ul class="client-logos">
-                    <li><a href="#" class="client-link"><img src="img/gallery/client-img-1.png" alt="Client"></a></li>
-                    <li><a href="#" class="client-link"><img src="img/gallery/client-img-2.png" alt="Client"></a></li>
-                    <li><a href="#" class="client-link"><img src="img/gallery/client-img-3.png" alt="Client"></a></li>
-                    <li><a href="#" class="client-link"><img src="img/gallery/client-img-4.png" alt="Client"></a></li>
-                    <li><a href="#" class="client-link"><img src="img/gallery/client-img-5.png" alt="Client"></a></li>
-                </ul>
 
             </div>
 
@@ -260,54 +219,25 @@ $(document).ready(function () {
             <div class="span8 blog">
 
                 <!-- Blog Post 1 -->
-                <article>
-                    <h3 class="title-bg"><a href="blog-single.htm">A subject that is beautiful in itself</a></h3>
+                <article th:each="blog : ${blogs}">
+                    <h3 class="title-bg"><a href="blog-single.htm" th:href="${blog.urlSingle}" th:text="${blog.title}">Посление новости</a></h3>
                     <div class="post-summary">
-                        <a href="blog-single.htm"><img src="img/gallery/post-img-1.jpg" alt="Post Thumb"></a>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla iaculis mattis lorem, quis gravida nunc iaculis ac. Proin tristique tellus in est vulputate luctus fermentum ipsum molestie. Vivamus tincidunt sem eu magna varius elementum. Maecenas felis tellus, fermentum vitae laoreet vitae, volutpat et urna. Nulla faucibus ligula eget ante varius ac euismod odio placerat. Nam sit amet felis non lorem faucibus rhoncus vitae id dui.</p>
+                        <a href="blog-single.htm" th:href="${blog.urlSingle}"><img src="img/gallery/post-img-1.jpg" th:src="${blog.postImg.content}" alt="Post Thumb"></a>
+                        <p th:text="${blog.annotation}"></p>
                         <div class="post-summary-footer">
-                            <button class="btn btn-small btn-inverse" type="button">Read more</button>
+                            <button class="btn btn-small btn-inverse" type="button">Читать дальше</button>
                             <ul class="post-data">
-                                <li><i class="icon-calendar"></i> 09/04/15</li>
-                                <li><i class="icon-user"></i> <a href="#">Admin</a></li>
-                                <li><i class="icon-comment"></i> <a href="#">5 Comments</a></li>
-                                <li><i class="icon-tags"></i> <a href="#">photoshop</a>, <a href="#">tutorials</a>, <a href="#">illustration</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </article>
+                                <li><i class="icon-calendar"></i> <span th:text="${blog.posted}">09/04/15</span></li>
+                                <li><i class="icon-user"></i> <a href="#" th:text="${blog.author.name}">Admin</a></li>
+                                <li><i class="icon-comment"></i> <a href="#" th:text="${blog.comments.size()}">5 Comments</a></li>
 
-                <!-- Blog Post 2 -->
-                <article>
-                    <h3 class="title-bg"><a href="blog-single.htm">A great artist is always before his time</a></h3>
-                    <div class="post-summary">
-                        <a href="blog-single.htm"><img src="img/gallery/post-img-1.jpg" alt="Post Thumb"></a>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla iaculis mattis lorem, quis gravida nunc iaculis ac. Proin tristique tellus in est vulputate luctus fermentum ipsum molestie. Vivamus tincidunt sem eu magna varius elementum. Maecenas felis tellus, fermentum vitae laoreet vitae, volutpat et urna. Nulla faucibus ligula eget ante varius ac euismod odio placerat. Nam sit amet felis non lorem faucibus rhoncus vitae id dui.</p>
-                        <div class="post-summary-footer">
-                            <button class="btn btn-small btn-inverse" type="button">Read more</button>
-                            <ul class="post-data">
-                                <li><i class="icon-calendar"></i> 09/04/15</li>
-                                <li><i class="icon-user"></i> <a href="#">Admin</a></li>
-                                <li><i class="icon-comment"></i> <a href="#">5 Comments</a></li>
-                                <li><i class="icon-tags"></i> <a href="#">photoshop</a>, <a href="#">tutorials</a>, <a href="#">illustration</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Blog Post 3 -->
-                <article>
-                    <h3 class="title-bg"><a href="blog-single.htm">Is art everything to anybody?</a></h3>
-                    <div class="post-summary">
-                        <a href="blog-single.htm"><img src="img/gallery/post-img-1.jpg" alt="Post Thumb"></a>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla iaculis mattis lorem, quis gravida nunc iaculis ac. Proin tristique tellus in est vulputate luctus fermentum ipsum molestie. Vivamus tincidunt sem eu magna varius elementum. Maecenas felis tellus, fermentum vitae laoreet vitae, volutpat et urna. Nulla faucibus ligula eget ante varius ac euismod odio placerat. Nam sit amet felis non lorem faucibus rhoncus vitae id dui.</p>
-                        <div class="post-summary-footer">
-                            <button class="btn btn-small btn-inverse" type="button">Read more</button>
-                            <ul class="post-data">
-                                <li><i class="icon-calendar"></i> 09/04/15</li>
-                                <li><i class="icon-user"></i> <a href="#">Admin</a></li>
-                                <li><i class="icon-comment"></i> <a href="#">5 Comments</a></li>
-                                <li><i class="icon-tags"></i> <a href="#">photoshop</a>, <a href="#">tutorials</a>, <a href="#">illustration</a></li>
+                                <li>
+                                    <i class="icon-tags"></i>
+                                    <span th:each="tag : ${blog.tags}">
+                                            <a href="#" th:text="${tag.tag}">photoshop</a>
+                                            &nbsp
+                                    </span>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -316,12 +246,12 @@ $(document).ready(function () {
                 <!-- Pagination -->
                 <div class="pagination">
                     <ul>
-                        <li class="active"><a href="#">Prev</a></li>
+                        <li class="active"><a href="#">Пред.</a></li>
                         <li class="active"><a href="#">1</a></li>
                         <li><a href="#">2</a></li>
                         <li><a href="#">3</a></li>
                         <li><a href="#">4</a></li>
-                        <li><a href="#">Next</a></li>
+                        <li><a href="#">След.</a></li>
                     </ul>
                 </div>
             </div>
@@ -334,87 +264,60 @@ $(document).ready(function () {
                 <section>
                     <div class="input-append">
                         <form action="#">
-                            <input id="appendedInputButton" size="16" type="text" placeholder="Search"><button class="btn" type="button"><i class="icon-search"></i></button>
+                            <input id="appendedInputButton" size="16" type="text" placeholder="Поиск"><button class="btn" type="button"><i class="icon-search"></i></button>
                         </form>
                     </div>
                 </section>
 
-                <!--Categories-->
-                <h5 class="title-bg">Categories</h5>
-                <ul class="post-category-list">
-                    <li><a href="#"><i class="icon-plus-sign"></i>Design</a></li>
-                    <li><a href="#"><i class="icon-plus-sign"></i>Illustration</a></li>
-                    <li><a href="#"><i class="icon-plus-sign"></i>Tutorials</a></li>
-                    <li><a href="#"><i class="icon-plus-sign"></i>News</a></li>
-                </ul>
+                <!--Category-->
+                <h5 class="title-bg">Категории</h5>
+                <div class="post-name-list">
+                    <ul>
+                        <li th:each="category : ${categories}"><a href="#" th:href="${category.url}"><i class="icon-plus-sign"></i><span th:text="${category.name}">Design</span></a></li>
+                    </ul>
+                </div>
 
                 <!--Popular Posts-->
-                <h5 class="title-bg">Popular Posts</h5>
+                <h5 class="title-bg">Популярные посты</h5>
                 <ul class="popular-posts">
-                    <li>
-                        <a href="#"><img src="img/gallery/gallery-img-2-thumb.jpg" alt="Popular Post"></a>
-                        <h6><a href="#">Lorem ipsum dolor sit amet consectetur adipiscing elit</a></h6>
-                        <em>Posted on 09/01/15</em>
-                    </li>
-                    <li>
-                        <a href="#"><img src="img/gallery/gallery-img-2-thumb.jpg" alt="Popular Post"></a>
-                        <h6><a href="#">Nulla iaculis mattis lorem, quis gravida nunc iaculis</a></h6>
-                        <em>Posted on 09/01/15</em>
-                    <li>
-                        <a href="#"><img src="img/gallery/gallery-img-2-thumb.jpg" alt="Popular Post"></a>
-                        <h6><a href="#">Vivamus tincidunt sem eu magna varius elementum maecenas felis</a></h6>
-                        <em>Posted on 09/01/15</em>
+                    <li th:each="post : ${popularPosts}">
+                        <a href="#" th:href="${post.urlSingle}"><img src="img/gallery/gallery-img-2-thumb.jpg" th:src="${post.tumbs2.content}" alt="Популярный пост"></a>
+                        <h6>
+                            <a href="#" th:href="${post.urlSingle}">
+                                <span th:text="${post.title}"></span>
+                            </a>
+                        </h6>
+                        <em>Опубликовано <span th:text="${post.posted}">09/01/15</span></em>
                     </li>
                 </ul>
 
                 <!--Tabbed Content-->
-                <h5 class="title-bg">More Info</h5>
+                <h5 class="title-bg">Дополнительная информация</h5>
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#comments" data-toggle="tab">Comments</a></li>
-                    <li><a href="#tweets" data-toggle="tab">Tweets</a></li>
-                    <li><a href="#about" data-toggle="tab">About</a></li>
+                    <li class="active"><a href="#about" data-toggle="tab">О сайте</a></li>
+                    <li><a href="#tweets" data-toggle="tab">Твиты</a></li>
                 </ul>
 
                 <div class="tab-content">
-                    <div class="tab-pane active" id="comments">
-                        <ul>
-                            <li><i class="icon-comment"></i>admin on <a href="#">Lorem ipsum dolor sit amet</a></li>
-                            <li><i class="icon-comment"></i>admin on <a href="#">Consectetur adipiscing elit</a></li>
-                            <li><i class="icon-comment"></i>admin on <a href="#">Ipsum dolor sit amet consectetur</a></li>
-                            <li><i class="icon-comment"></i>admin on <a href="#">Aadipiscing elit varius elementum</a></li>
-                            <li><i class="icon-comment"></i>admin on <a href="#">ulla iaculis mattis lorem</a></li>
-                        </ul>
+                    <div class="tab-pane active" id="about" th:utext="${about}">
                     </div>
+
                     <div class="tab-pane" id="tweets">
                         <ul>
-                            <li><a href="#"><i class="icon-share-alt"></i>@room122</a> Vivamus tincidunt sem eu magna varius elementum. Maecenas felis tellus, fermentum vitae laoreet vitae, volutpat et urna.</li>
-                            <li><a href="#"> <i class="icon-share-alt"></i>@room122</a> Nulla faucibus ligula eget ante varius ac euismod odio placerat.</li>
-                            <li><a href="#"> <i class="icon-share-alt"></i>@room122</a> Pellentesque iaculis lacinia leo. Donec suscipit, lectus et hendrerit posuere, dui nisi porta risus, eget adipiscing</li>
-                            <li><a href="#"> <i class="icon-share-alt"></i>@room122</a> Vivamus augue nulla, vestibulum ac ultrices posuere, vehicula ac arcu.</li>
-                            <li><a href="#"> <i class="icon-share-alt"></i>@room122</a> Sed ac neque nec leo condimentum rhoncus. Nunc dapibus odio et lacus.</li>
+                            <li th:each="tweet : ${tweets}"><a href="#"><i class="icon-share-alt"></i><span th:text="${tweet.created}">08.06.2018</span></a>&nbsp;<span th:text="${tweet.messages}"> Ну вот уже сайт приобретает черты, скоро открытие</span></li>
                         </ul>
-                    </div>
-                    <div class="tab-pane" id="about">
-                        <p>Enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.</p>
-
-                        Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
                     </div>
                 </div>
 
                 <!--Video Widget-->
-                <h5 class="title-bg">Video Widget</h5>
-                <iframe src="http://player.vimeo.com/video/24496773" width="370" height="208"></iframe>
+                <h5 class="title-bg">Случайное видео о Мамае</h5>
+                <iframe width="370" height="208" th:src="${randomVideo.videoUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+                <!--<iframe width="370" height="208" src="https://www.youtube.com/embed/-TKNdC2JPFo?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>-->
             </div>
 
 
         </div><!-- End Bottom Section -->
-
-        <!-- Blog Content
-        ================================================== -->
-        <div class="row">
-
-
-        </div>
 
     </div> <!-- End Container -->
 
@@ -425,37 +328,33 @@ $(document).ready(function () {
     	<div class="container">
         	<div class="row footer-row">
                 <div class="span3 footer-col">
-                    <h5>About Us</h5>
-                   <img src="img/piccolo-footer-logo.png" alt="Piccolo" /><br /><br />
+                    <h5>Контакты</h5>
+                   <img src="img/mamay_logo3.png" alt="Piccolo" /><br /><br />
                     <address>
-                        <strong>Design Team</strong><br />
-                        123 Main St, Suite 500<br />
-                        New York, NY 12345<br />
+                        <strong>Мы находимся</strong><br />
+                        Россия, г. Иркутск
                     </address>
                     <ul class="social-icons">
-                        <li><a href="#" class="social-icon facebook"></a></li>
-                        <li><a href="#" class="social-icon twitter"></a></li>
-                        <li><a href="#" class="social-icon dribble"></a></li>
-                        <li><a href="#" class="social-icon rss"></a></li>
-                        <li><a href="#" class="social-icon forrst"></a></li>
+                        <li><a href="#" class="social-icon vkontakte"></a></li>
+                        <li><a href="#" class="social-icon instagram"></a></li>
                     </ul>
                 </div>
                 <div class="span3 footer-col">
-                    <h5>Latest Tweets</h5>
+                    <h5>Последние твиты</h5>
                     <ul>
-                        <li><a href="#">@room122</a> Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-                        <li><a href="#">@room122</a> In interdum felis fermentum ipsum molestie sed porttitor ligula rutrum. Morbi blandit ultricies ultrices.</li>
-                        <li><a href="#">@room122</a> Vivamus nec lectus sed orci molestie molestie. Etiam mattis neque eu orci rutrum aliquam.</li>
+                        <li th:each="tweet : ${last3tweets}"><a href="#" th:text="${tweet.created}"></a>&nbsp;<span th:text="${tweet.messages}"></span></li>
                     </ul>
+
                 </div>
                 <div class="span3 footer-col">
-                    <h5>Latest Posts</h5>
+                    <h5>Последние посты</h5>
                      <ul class="post-list">
-                        <li><a href="#">Lorem ipsum dolor sit amet</a></li>
-                        <li><a href="#">Consectetur adipiscing elit est lacus gravida</a></li>
-                        <li><a href="#">Lectus sed orci molestie molestie etiam</a></li>
-                        <li><a href="#">Mattis consectetur adipiscing elit est lacus</a></li>
-                        <li><a href="#">Cras rutrum, massa non blandit convallis est</a></li>
+                         <li th:each="blog : ${last3blogs}"><a href="#" th:href="${blog.urlSingle}" th:text="${blog.title}">Lorem ipsum dolor sit amet</a></li>
+                         <!--<li><a href="#">Lorem ipsum dolor sit amet</a></li>-->
+                        <!--<li><a href="#">Consectetur adipiscing elit est lacus gravida</a></li>-->
+                        <!--<li><a href="#">Lectus sed orci molestie molestie etiam</a></li>-->
+                        <!--<li><a href="#">Mattis consectetur adipiscing elit est lacus</a></li>-->
+                        <!--<li><a href="#">Cras rutrum, massa non blandit convallis est</a></li>-->
                     </ul>
                 </div>
                 <div class="span3 footer-col">

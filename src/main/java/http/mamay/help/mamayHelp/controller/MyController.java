@@ -1,15 +1,12 @@
 package http.mamay.help.mamayHelp.controller;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import http.mamay.help.mamayHelp.dataBase.DataImpl;
-import http.mamay.help.mamayHelp.dataBase.User;
-import http.mamay.help.mamayHelp.dataBase.UserRepository;
+import http.mamay.help.mamayHelp.dataBase.userManager.model.User;
+import http.mamay.help.mamayHelp.dataBase.userManager.service.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -33,6 +30,17 @@ public class MyController {
         model.addAttribute("mamayWelcome", "Мамай - это уникальное место, рассположенно в горах недалеко от оз. " +
                 "Байкал. Это место посещают каждый год зимой фрирайдеры из россии и зарубежья");
         model.addAttribute("menuItems", dataImpl.getMenuItems());
+        model.addAttribute("sliders", dataImpl.getSliders());
+        model.addAttribute("topBlogs", dataImpl.getTop5blogs());
+        model.addAttribute("userReviews", dataImpl.getUserReviews());
+        model.addAttribute("blogs", dataImpl.getBlogs());
+        model.addAttribute("last3blogs", dataImpl.getLast3Blogs());
+        model.addAttribute("categories", dataImpl.getCategories());
+        model.addAttribute("popularPosts", dataImpl.getPopularPosts());
+        model.addAttribute("tweets",dataImpl.getTweets());
+        model.addAttribute("last3tweets", dataImpl.getLast3Tweets());
+        model.addAttribute("about", dataImpl.getAbout());
+        model.addAttribute("randomVideo", dataImpl.getRandomVideo());
         return "index";
     }
 
@@ -51,4 +59,9 @@ public class MyController {
         return userRepository.findAll();
     }
 
+    @GetMapping(path = "/vk")
+    public String vk(@RequestParam(name="name", required=false, defaultValue="Hello VK World!") String name, Model model){
+        model.addAttribute("name", name);
+        return "vk";
+    };
 }
