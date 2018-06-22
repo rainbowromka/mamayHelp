@@ -1,23 +1,34 @@
 package http.mamay.help.mamayHelp.dataBase;
 
+import http.mamay.help.mamayHelp.dataBase.VideoContentManager.model.VideoContent;
+import http.mamay.help.mamayHelp.dataBase.VideoContentManager.repository.VideoContentRepository;
 import http.mamay.help.mamayHelp.dataBase.blogmanager.model.*;
 import http.mamay.help.mamayHelp.dataBase.blogmanager.model.content.*;
 import http.mamay.help.mamayHelp.dataBase.blogmanager.repository.*;
+import http.mamay.help.mamayHelp.dataBase.blogmanager.service.BlogPage;
 import http.mamay.help.mamayHelp.dataBase.blogmanager.service.BlogRecordService;
-import http.mamay.help.mamayHelp.dataBase.entities.*;
+import http.mamay.help.mamayHelp.dataBase.categoryManager.model.Category;
+import http.mamay.help.mamayHelp.dataBase.categoryManager.repository.CategoryRepository;
 import http.mamay.help.mamayHelp.dataBase.menuItemManager.model.MenuItem;
 import http.mamay.help.mamayHelp.dataBase.menuItemManager.service.MenuItemRepositary;
+import http.mamay.help.mamayHelp.dataBase.tweetManager.model.Tweet;
+import http.mamay.help.mamayHelp.dataBase.tweetManager.repository.TweetRepository;
 import http.mamay.help.mamayHelp.dataBase.userManager.model.User;
 import http.mamay.help.mamayHelp.dataBase.userManager.service.UserRepository;
+import http.mamay.help.mamayHelp.dataBase.userReviewManager.model.UserReview;
+import http.mamay.help.mamayHelp.dataBase.userReviewManager.repository.UserReviewRepository;
 import http.mamay.help.mamayHelp.sliderItemManager.model.SliderItem;
 import http.mamay.help.mamayHelp.sliderItemManager.service.SliderItemRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,23 +57,43 @@ public class DataImpl {
     BlogTextRepository blogTextRepository;
     @Autowired
     BlogImageRepository blogImageRepository;
-
+    @Autowired
+    private UserReviewRepository userReviewRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
+    TweetRepository tweetRepository;
+    @Autowired
+    VideoContentRepository videoContentRepository;
 
     List<MenuItem> menuItems = new ArrayList<>();
     List<SliderItem> sliders = new ArrayList<>();
     List<BlogTag> blogTags = new ArrayList<>();
 
     List<BlogRecord> top5blogs = new ArrayList<>();
-    List<UserReview> userReviews = new ArrayList<>();
     @Getter @Setter
-    List<BlogRecord> blogs = new ArrayList<>();
-    List<BlogRecord> last3Blogs = new ArrayList<>();
-    private List<Category> categories = new ArrayList<>();
+    Iterable<UserReview> userReviews = new ArrayList<>();
+    @Getter @Setter
+    private Page<BlogRecord> blogs;
+    @Getter @Setter
+    int curPage;
+    // TODO: 22.06.2018 Надо сделать загрузку последних трех блогов
+    @Getter @Setter
+    private List<BlogRecord> last3Blogs = new ArrayList<>();
+
+    @Getter @Setter
+    private List<BlogPage> blogPages;
+    @Getter @Setter
+    private Iterable<Category> categories = new ArrayList<>();
     private List<BlogRecord> popularPosts = new ArrayList<>();
-    private List<Tweet> tweets = new ArrayList<>();
-    private List<Tweet> last3Tweets = new ArrayList<>();
+    @Getter @Setter
+    private Iterable<Tweet> tweets = new ArrayList<>();
+    @Getter @Setter
+    private Iterable<Tweet> last3Tweets = new ArrayList<>();
     private String about;
+    @Getter @Setter
     private List<VideoContent> videos = new ArrayList<>();
+
 
     public void setPopularPosts(List<BlogRecord> popularPosts) {
         this.popularPosts = popularPosts;
@@ -97,30 +128,6 @@ public class DataImpl {
         this.top5blogs = top5blogs;
     }
 
-    public List<UserReview> getUserReviews() {
-        return userReviews;
-    }
-
-    public void setUserReviews(List<UserReview> userReviews) {
-        this.userReviews = userReviews;
-    }
-
-    public List<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
-
-    public List<Tweet> getTweets() {
-        return tweets;
-    }
-
-    public void setTweets(List<Tweet> tweets) {
-        this.tweets = tweets;
-    }
-
     public String getAbout() {
         return about;
     }
@@ -129,25 +136,10 @@ public class DataImpl {
         this.about = about;
     }
 
-    public List<Tweet> getLast3Tweets() {
-        return last3Tweets;
-    }
-
-    public void setLast3Tweets(List<Tweet> last3Tweets) {
-        this.last3Tweets = last3Tweets;
-    }
-
     public VideoContent getRandomVideo() {
+        videos = videoContentRepository.findAll();
         int e = (int) (Math.random() * (videos.size() - 1));
         return videos.get(e);
-    }
-
-    public List<BlogRecord> getLast3Blogs() {
-        return last3Blogs;
-    }
-
-    public void setLast3Blogs(List<BlogRecord> last3Blogs) {
-        this.last3Blogs = last3Blogs;
     }
 
     @PostConstruct
@@ -196,7 +188,7 @@ public class DataImpl {
         BlogRecord blog = new BlogRecord();
 //        blog.setIndex(0);
         blog.setTitle("Новые места или хорошо забытые старые =)");
-        blog.setPosted("07.01.2013");
+        blog.setPosted(LocalDateTime.of(LocalDate.of(2013, 01, 07), LocalTime.now()));//"07.01.2013");
         blog.setAuthor(userRoman);
         blog.getComments().clear();
         blog.getTags().clear();
@@ -341,7 +333,8 @@ public class DataImpl {
         blog = new BlogRecord();
 //        blog.setIndex(1);
         blog.setTitle("Карта Мамая");
-        blog.setPosted("14.12.2017");
+//        blog.setPosted("14.12.2017");
+        blog.setPosted(LocalDateTime.of(LocalDate.of(2017, 12, 14), LocalTime.now()));
         blog.setAuthor(userRoman);
         blog.getComments().clear();
         blog.getTags().clear();
@@ -514,44 +507,51 @@ public class DataImpl {
         blog.setRating(15);
         blogRecordService.save(blog);
 
-        blogs = blogRecordService.findAll();
+
+//        blogs = blogRecordService.findAll();
+        blogs = blogRecordService.findByOrderByPostedDesc(0, 5);
+        curPage = blogRecordService.getCurPage();
+        blogPages = blogRecordService.getBlogPages();
 
         top5blogs = blogRecordService.findTop5ByOrderByRatingDescNotLazy();
+        popularPosts = blogRecordService.findTop5ByOrderByRatingDescNotLazy();
 
 
 
-//        top5blogs.add(blog);
-//        blogs.add(blog);
-//        popularPosts.add(blog);
-//        last3Blogs.add(blog);
 
-        userReviews.add(new UserReview(userRoman, "Мамай это - мекка прибайкальского фрирайда. Снега тут " +
+        userReviewRepository.save(new UserReview(userRoman, "Мамай это - мекка прибайкальского фрирайда. Снега тут " +
                 "выпадает за сезон до 5 метров. Самая крутая катка ноябрь-декабрь, если Байкал замерзнет позже, еще " +
-                "можно покататься отлично в январе. Впрочем кататься тут можно до апреля включительно", 0));
-        userReviews.add(new UserReview(userRoman, "За годы здесь сформировалось маленькое комьюнити, здесь тебе " +
-                "рады в каждом домике, на горе охотно покажут куда ехать", 1));
-        userReviews.add(new UserReview(userRoman, "Это место где я отдыхаю от суеты города, здесь я заряжаюсь " +
+                "можно покататься отлично в январе. Впрочем кататься тут можно до апреля включительно"));
+        userReviewRepository.save(new UserReview(userRoman, "За годы здесь сформировалось маленькое комьюнити, здесь тебе " +
+                "рады в каждом домике, на горе охотно покажут куда ехать"));
+        userReviewRepository.save(new UserReview(userRoman, "Это место где я отдыхаю от суеты города, здесь я заряжаюсь " +
                 "энергией, риск - очищает мой разум, это особенность любого мужчины, здесь я наедине с природой. Ну и " +
-                "конечно же риск должен быть оправдан. Мы не лезем на рожон, изучаем горы. Уважаем природу, следим за чистотой.", 2));
+                "конечно же риск должен быть оправдан. Мы не лезем на рожон, изучаем горы. Уважаем природу, следим за чистотой."));
 
-        categories.clear();
-        categories.add(new Category("Справочник", "guide.html"));
-        categories.add(new Category("Карта", "map.html"));
-        categories.add(new Category("Галлерея", "picture.html"));
-        categories.add(new Category("Контакты", "contact.html"));
+        userReviews =  userReviewRepository.findAll();
 
-        Tweet tweet;
-        tweet = new Tweet("08.06.2018", "Ну вот уже сайт приобретает черты, скоро открытие");
-        tweets.add(tweet);
-        last3Tweets.add(tweet);
-        tweet = new Tweet("07.06.2018", "Разработан раздел карты");
-        tweets.add(tweet);
-        last3Tweets.add(tweet);
-        tweet = new Tweet("04.06.2018", "Теперь вы можете забронировать домик Yeti на сайте");
-        tweets.add(tweet);
-        last3Tweets.add(tweet);
-        tweets.add(new Tweet("01.06.2018", " Правая колонка завершена"));
-        tweets.add(new Tweet("31.04.2018", " Раздел блоги завершен, оформляем остальные разделы"));
+
+
+        List <Category> categoriesList = new ArrayList<>();
+        categoriesList.add(new Category("Справочник", "guide.html"));
+        categoriesList.add(new Category("Карта", "map.html"));
+        categoriesList.add(new Category("Галлерея", "picture.html"));
+        categoriesList.add(new Category("Контакты", "contact.html"));
+        categoryRepository.saveAll(categoriesList);
+        categories = categoryRepository.findAll();
+
+
+        List<Tweet> tweetList = new ArrayList<>();
+        tweetList.add(new Tweet(LocalDate.of(2018, 6, 8), "Ну вот уже сайт приобретает черты, скоро открытие"));
+        tweetList.add(new Tweet(LocalDate.of(2018,6,7), "Разработан раздел карты"));
+        tweetList.add(new Tweet(LocalDate.of(2018, 6, 4), "Теперь вы можете забронировать домик Yeti на сайте"));
+        tweetList.add(new Tweet(LocalDate.of(2018,6,1), " Правая колонка завершена"));
+        tweetList.add(new Tweet(LocalDate.of(2018,4,30), " Раздел блоги завершен, оформляем остальные разделы"));
+        tweetRepository.saveAll(tweetList);
+        tweets = tweetRepository.findTop5ByOrderByCreatedDesc();
+        last3Tweets = tweetRepository.findTop3ByOrderByCreatedDesc();
+
+// TODO: 22.06.2018 Определить количество страниц
 
         about  = "<p>Задача этого сайта сводится к систематизаци и наведения порядка в экстремальном спорте (в частности во " +
                 "фрирайде). Цель рассказать о уникальном месте. Заставить вас проникнуться нашим миром. И уже когда вы будете " +
@@ -565,14 +565,15 @@ public class DataImpl {
                 "\n" +
                 "Отличного вам настроения!";
 
-        videos.add(new VideoContent("https://www.youtube.com/embed/-TKNdC2JPFo"));
-        videos.add(new VideoContent("https://www.youtube.com/embed/fntJE4tSSvs"));
-        videos.add(new VideoContent("https://www.youtube.com/embed/K-lXNWFbPOk"));
-        videos.add(new VideoContent("https://www.youtube.com/embed/vVf69sqV1mc"));
-        videos.add(new VideoContent("https://www.youtube.com/embed/Jfj6sgvG2WM"));
-        videos.add(new VideoContent("https://www.youtube.com/embed/uTbwzTWk2cc"));
-        videos.add(new VideoContent("https://www.youtube.com/embed/yWVl58P2rQU"));
-
+        List<VideoContent> videoContents = new ArrayList<>();
+        videoContents.add(new VideoContent("https://www.youtube.com/embed/-TKNdC2JPFo"));
+        videoContents.add(new VideoContent("https://www.youtube.com/embed/fntJE4tSSvs"));
+        videoContents.add(new VideoContent("https://www.youtube.com/embed/K-lXNWFbPOk"));
+        videoContents.add(new VideoContent("https://www.youtube.com/embed/vVf69sqV1mc"));
+        videoContents.add(new VideoContent("https://www.youtube.com/embed/Jfj6sgvG2WM"));
+        videoContents.add(new VideoContent("https://www.youtube.com/embed/uTbwzTWk2cc"));
+        videoContents.add(new VideoContent("https://www.youtube.com/embed/yWVl58P2rQU"));
+        videoContentRepository.saveAll(videoContents);
     }
 
 }

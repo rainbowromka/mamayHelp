@@ -10,7 +10,9 @@ import lombok.Setter;
 import lombok.extern.java.Log;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,7 +27,8 @@ public class BlogRecord {
     @Column(name = "title")
     private String title;
     @Column(name = "posted")
-    private String posted;
+    @Getter @Setter
+    private LocalDateTime posted;
 //    @Column(name = "author")
     @ManyToOne(optional = false)
     private User author;
@@ -69,14 +72,6 @@ public class BlogRecord {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getPosted() {
-        return posted;
-    }
-
-    public void setPosted(String posted) {
-        this.posted = posted;
     }
 
     public User getAuthor() {

@@ -244,13 +244,13 @@ $(document).ready(function () {
                 </article>
 
                 <!-- Pagination -->
-                <div class="pagination">
+                <div th:if="${blogs.getTotalPages() > 0}" class="pagination">
                     <ul>
+<!--todo надо учесть пред. и след. что бы были некативны ссылки, в зависимости от расположения страницы, так на первой странице пред должен быть без ссылки-->
                         <li class="active"><a href="#">Пред.</a></li>
-                        <li class="active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
+                        <li th:each="blogPage, bpStat : ${blogPages}" th:class="((${blogPage.page == curPage}) ? 'active' : '')">
+                            <a href="#" th:text="${blogPage.page} + 1"></a>
+                        </li>;
                         <li><a href="#">След.</a></li>
                     </ul>
                 </div>

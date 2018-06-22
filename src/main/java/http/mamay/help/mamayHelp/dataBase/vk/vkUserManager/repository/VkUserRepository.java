@@ -1,4 +1,4 @@
-package http.mamay.help.mamayHelp.dataBase.vk.vkUserManager.service;
+package http.mamay.help.mamayHelp.dataBase.vk.vkUserManager.repository;
 
 import http.mamay.help.mamayHelp.dataBase.vk.vkUserManager.model.VkUser;
 import org.springframework.data.repository.CrudRepository;

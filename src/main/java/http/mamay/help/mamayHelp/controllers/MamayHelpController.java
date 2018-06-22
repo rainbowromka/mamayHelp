@@ -1,4 +1,4 @@
-package http.mamay.help.mamayHelp.controller;
+package http.mamay.help.mamayHelp.controllers;
 
 import http.mamay.help.mamayHelp.dataBase.DataImpl;
 import http.mamay.help.mamayHelp.dataBase.userManager.model.User;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 //@RequestMapping(path = "/demo")
-public class MyController {
+public class MamayHelpController {
 
     @Autowired
     private UserRepository userRepository;
@@ -41,6 +41,8 @@ public class MyController {
         model.addAttribute("last3tweets", dataImpl.getLast3Tweets());
         model.addAttribute("about", dataImpl.getAbout());
         model.addAttribute("randomVideo", dataImpl.getRandomVideo());
+        model.addAttribute("curPage", dataImpl.getCurPage());
+        model.addAttribute("blogPages", dataImpl.getBlogPages());
         return "index";
     }
 
@@ -59,9 +61,9 @@ public class MyController {
         return userRepository.findAll();
     }
 
-    @GetMapping(path = "/vk")
-    public String vk(@RequestParam(name="name", required=false, defaultValue="Hello VK World!") String name, Model model){
-        model.addAttribute("name", name);
-        return "vk";
-    };
+//    @GetMapping(path = "/vk")
+//    public String vk(@RequestParam(name="name", required=false, defaultValue="Hello VK World!") String name, Model model){
+//        model.addAttribute("name", name);
+//        return "vk";
+//    };
 }
