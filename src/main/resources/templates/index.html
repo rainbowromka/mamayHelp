@@ -77,44 +77,10 @@ $(document).ready(function () {
     <div class="color-bar-2 color-bg"></div>
     
     <div class="container main-container">
-    
-        <div class="row header"><!-- Begin Header -->
-      
-            <!-- Лого
-            ================================================== -->
-            <div class="span5 logo">
-                <a href="index.html"><img src="img/mamay_logo2.png" alt="" /></a>
-                <h4>мекка прибайкальского фрирайда</h4>
-            </div>
 
-            <!-- Главное меню
-            ================================================== -->
-            <div class="span7 navigation">
-                <div class="navbar hidden-phone">
 
-                    <ul class="nav">
-                        <li th:each="menu : ${menuItems}" th:class="((${menu.name} == 'Главная')? 'active' : '')">
-                            <a th:href="${menu.url}" th:text="${menu.name}"/>
-                        </li>
-                    </ul>
+        <div class="row header" th:replace="header :: header"></div>
 
-                </div>
-
-                <!-- Мобильное меню
-                ================================================== -->
-                <form action="#" id="mobile-nav" class="visible-phone">
-                    <div class="mobile-nav-select">
-                        <select onchange="window.open(this.options[this.selectedIndex].value,'_top')">
-                            <option value="">Навигация...</option>
-                            <option th:each="menu : ${menuItems}" th:value="${menu.url}" th:text="${menu.name}">Главная</option>
-                        </select>
-                    </div>
-                </form>
-
-            </div>
-        
-         </div><!-- End Header -->
-     
         <div class="row headline"><!-- Begin Headline -->
 
          	<!-- Slider Carousel
@@ -159,9 +125,9 @@ $(document).ready(function () {
 
                         <!--Blog Item 1-->
                         <div th:each="topBlog : ${topBlogs}" th:class="((${topBlogStat.first}) ? 'active item post-content' : 'post-content item')">
-                            <a th:href="${topBlog.urlSingle}"><img th:src="${topBlog.tumbs.content}" alt="" class="align-left blog-thumb-preview" /></a>
+                            <a th:href="@{/blog(id=${topBlog.id})}"><img th:src="${topBlog.tumbs.content}" alt="" class="align-left blog-thumb-preview" /></a>
                             <div class="post-info clearfix">
-                                <h4><a th:href="${topBlog.urlSingle}" th:text="${topBlog.title}">A subject that is beautiful in itself</a></h4>
+                                <h4><a th:href="@{/blog(id=${topBlog.id})}" th:text="${topBlog.title}">A subject that is beautiful in itself</a></h4>
                                 <ul class="blog-details-preview">
                                     <li>
                                         <i class='icon-calendar'></i>
@@ -169,7 +135,7 @@ $(document).ready(function () {
                                         <span th:text="${topBlog.posted}"></span>
                                     <li>
                                     <li><i class="icon-user"></i><strong>Автор:</strong> <a href="#" title="Link" th:text="${topBlog.author.name}">Admin</a><li>
-                                    <li><i class="icon-comment"></i><strong>Comments:</strong> <a href="#" title="Link" th:text="${topBlog.comments.size()}">12</a><li>
+                                    <li><i class="icon-comment"></i><strong>Комментарии:</strong> <a href="#" title="Link" th:text="${topBlog.comments.size()}">12</a><li>
                                     <li>
                                         <i class="icon-tags"></i>
                                         <span th:each="tag : ${topBlog.tags}">
@@ -179,7 +145,7 @@ $(document).ready(function () {
                                     </li>
                                 </ul>
                             </div>
-                            <p class="blog-summary"><span th:text="${topBlog.annotation}"></span><a href="#">Дальше</a><p>
+                            <p class="blog-summary"><span th:text="${topBlog.annotation}"></span><a th:href="@{/blog(id=${topBlog.id})}">Дальше</a><p>
                         </div>
                     </div>
                 </div>
@@ -220,12 +186,13 @@ $(document).ready(function () {
 
                 <!-- Blog Post 1 -->
                 <article th:each="blog : ${blogs}">
-                    <h3 class="title-bg"><a href="blog-single.htm" th:href="${blog.urlSingle}" th:text="${blog.title}">Посление новости</a></h3>
+                    <h3 class="title-bg"><a href="blog-single.htm" th:href="@{/blog(id=${blog.id})}" th:text="${blog.title}">Посление новости</a></h3>
                     <div class="post-summary">
-                        <a href="blog-single.htm" th:href="${blog.urlSingle}"><img src="img/gallery/post-img-1.jpg" th:src="${blog.postImg.content}" alt="Post Thumb"></a>
+                        <a href="blog-single.htm" th:href="@{/blog(id=${blog.id})}"><img src="img/gallery/post-img-1.jpg" th:src="${blog.postImg.content}" alt="Post Thumb"></a>
                         <p th:text="${blog.annotation}"></p>
                         <div class="post-summary-footer">
-                            <button class="btn btn-small btn-inverse" type="button">Читать дальше</button>
+                            <a class="btn btn-small btn-inverse" type="button" th:href="@{/blog(id=${blog.id})}">Читать дальше</a>
+                            <!--<button class="btn btn-small btn-inverse" type="button" th:url="">Читать дальше</button>-->
                             <ul class="post-data">
                                 <li><i class="icon-calendar"></i> <span th:text="${blog.posted}">09/04/15</span></li>
                                 <li><i class="icon-user"></i> <a href="#" th:text="${blog.author.name}">Admin</a></li>
@@ -249,7 +216,8 @@ $(document).ready(function () {
 <!--todo надо учесть пред. и след. что бы были некативны ссылки, в зависимости от расположения страницы, так на первой странице пред должен быть без ссылки-->
                         <li class="active"><a href="#">Пред.</a></li>
                         <li th:each="blogPage, bpStat : ${blogPages}" th:class="((${blogPage.page == curPage}) ? 'active' : '')">
-                            <a href="#" th:text="${blogPage.page} + 1"></a>
+<!--todo надо ссылку сделать неактивной для текущей страницы-->
+                            <a th:href="@{/(page=${blogPage.page})}" th:text="${blogPage.page} + 1"></a>
                         </li>;
                         <li><a href="#">След.</a></li>
                     </ul>
@@ -258,140 +226,17 @@ $(document).ready(function () {
 
             <!-- Blog Sidebar
             ================================================== -->
-            <div class="span4 sidebar">
-
-                <!--Search-->
-                <section>
-                    <div class="input-append">
-                        <form action="#">
-                            <input id="appendedInputButton" size="16" type="text" placeholder="Поиск"><button class="btn" type="button"><i class="icon-search"></i></button>
-                        </form>
-                    </div>
-                </section>
-
-                <!--Category-->
-                <h5 class="title-bg">Категории</h5>
-                <div class="post-name-list">
-                    <ul>
-                        <li th:each="category : ${categories}"><a href="#" th:href="${category.url}"><i class="icon-plus-sign"></i><span th:text="${category.name}">Design</span></a></li>
-                    </ul>
-                </div>
-
-                <!--Popular Posts-->
-                <h5 class="title-bg">Популярные посты</h5>
-                <ul class="popular-posts">
-                    <li th:each="post : ${popularPosts}">
-                        <a href="#" th:href="${post.urlSingle}"><img src="img/gallery/gallery-img-2-thumb.jpg" th:src="${post.tumbs2.content}" alt="Популярный пост"></a>
-                        <h6>
-                            <a href="#" th:href="${post.urlSingle}">
-                                <span th:text="${post.title}"></span>
-                            </a>
-                        </h6>
-                        <em>Опубликовано <span th:text="${post.posted}">09/01/15</span></em>
-                    </li>
-                </ul>
-
-                <!--Tabbed Content-->
-                <h5 class="title-bg">Дополнительная информация</h5>
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#about" data-toggle="tab">О сайте</a></li>
-                    <li><a href="#tweets" data-toggle="tab">Твиты</a></li>
-                </ul>
-
-                <div class="tab-content">
-                    <div class="tab-pane active" id="about" th:utext="${about}">
-                    </div>
-
-                    <div class="tab-pane" id="tweets">
-                        <ul>
-                            <li th:each="tweet : ${tweets}"><a href="#"><i class="icon-share-alt"></i><span th:text="${tweet.created}">08.06.2018</span></a>&nbsp;<span th:text="${tweet.messages}"> Ну вот уже сайт приобретает черты, скоро открытие</span></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!--Video Widget-->
-                <h5 class="title-bg">Случайное видео о Мамае</h5>
-                <iframe width="370" height="208" th:src="${randomVideo.videoUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
-                <!--<iframe width="370" height="208" src="https://www.youtube.com/embed/-TKNdC2JPFo?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>-->
-            </div>
-
+            <div class="span4 sidebar" th:replace="sidebar :: sidebar"></div>
 
         </div><!-- End Bottom Section -->
+
 
     </div> <!-- End Container -->
 
     <!-- Footer Area
         ================================================== -->
+    <div class="footer-container" th:replace="footer :: footer"></div>
 
-	<div class="footer-container"><!-- Begin Footer -->
-    	<div class="container">
-        	<div class="row footer-row">
-                <div class="span3 footer-col">
-                    <h5>Контакты</h5>
-                   <img src="img/mamay_logo3.png" alt="Piccolo" /><br /><br />
-                    <address>
-                        <strong>Мы находимся</strong><br />
-                        Россия, г. Иркутск
-                    </address>
-                    <ul class="social-icons">
-                        <li><a href="#" class="social-icon vkontakte"></a></li>
-                        <li><a href="#" class="social-icon instagram"></a></li>
-                    </ul>
-                </div>
-                <div class="span3 footer-col">
-                    <h5>Последние твиты</h5>
-                    <ul>
-                        <li th:each="tweet : ${last3tweets}"><a href="#" th:text="${tweet.created}"></a>&nbsp;<span th:text="${tweet.messages}"></span></li>
-                    </ul>
-
-                </div>
-                <div class="span3 footer-col">
-                    <h5>Последние посты</h5>
-                     <ul class="post-list">
-                         <li th:each="blog : ${last3blogs}"><a href="#" th:href="${blog.urlSingle}" th:text="${blog.title}">Lorem ipsum dolor sit amet</a></li>
-                         <!--<li><a href="#">Lorem ipsum dolor sit amet</a></li>-->
-                        <!--<li><a href="#">Consectetur adipiscing elit est lacus gravida</a></li>-->
-                        <!--<li><a href="#">Lectus sed orci molestie molestie etiam</a></li>-->
-                        <!--<li><a href="#">Mattis consectetur adipiscing elit est lacus</a></li>-->
-                        <!--<li><a href="#">Cras rutrum, massa non blandit convallis est</a></li>-->
-                    </ul>
-                </div>
-                <div class="span3 footer-col">
-                    <h5>Flickr Photos</h5>
-                    <ul class="img-feed">
-                        <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
-                        <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
-                        <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
-                        <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
-                        <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
-                        <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
-                        <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
-                        <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
-                        <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
-                        <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
-                        <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
-                        <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="row"><!-- Begin Sub Footer -->
-                <div class="span12 footer-col footer-sub">
-                    <div class="row no-margin">
-                        <div class="span6"><span class="left">Copyright 2012 Piccolo Theme. All rights reserved.</span></div>
-                        <div class="span6">
-                            <span class="right">
-                            <a href="#">Home</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Features</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Gallery</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Blog</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Contact</a>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div><!-- End Sub Footer -->
-
-        </div>
-    </div><!-- End Footer --> 
-    
     <!-- Scroll to Top -->  
     <div id="toTop" class="hidden-phone hidden-tablet">Back to Top</div>
     

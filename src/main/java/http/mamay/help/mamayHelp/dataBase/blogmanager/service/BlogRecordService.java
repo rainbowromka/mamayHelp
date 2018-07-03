@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BlogRecordService {
@@ -89,6 +90,21 @@ public class BlogRecordService {
         }
     }
 
-    ;
+    private void loadLazy(BlogRecord blog) {
+        if (blog == null) return;
+        for (BlogContent blogContent: blog.getContents()){
+        }
+    }
+
+    public BlogRecord findById(long blogId) {
+        if (blogId < 0) return null;
+        BlogRecord blog = null;
+        if (blogRecordRepository.existsById(blogId)) {
+            blog = blogRecordRepository.findById(blogId).get();
+            loadLazy(blog);
+        }
+// TODO: 28.06.2018 Добавить сюда вывод пустой страницы типа, блог с нужным ID не найден
+        return blog;
+    }
 
 }

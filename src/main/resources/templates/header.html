@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <!-- Blog Sidebar
+    ================================================== -->
+    <div class="row header" th:fragment="header"><!-- Begin Header -->
+
+        <!-- Лого
+        ================================================== -->
+        <div class="span5 logo">
+            <a href="/"><img src="img/mamay_logo2.png" alt="" /></a>
+            <h4>мекка прибайкальского фрирайда</h4>
+        </div>
+
+        <!-- Главное меню
+        ================================================== -->
+        <div class="span7 navigation">
+            <div class="navbar hidden-phone">
+
+                <ul class="nav">
+                    <li th:each="menu : ${menuItems}" th:class="((${menu.name} == ${curMenu})? 'active' : '')">
+                        <a th:href="${menu.url}" th:text="${menu.name}"/>
+                    </li>
+                </ul>
+
+            </div>
+
+            <!-- Мобильное меню
+            ================================================== -->
+            <form action="#" id="mobile-nav" class="visible-phone">
+                <div class="mobile-nav-select">
+                    <select onchange="window.open(this.options[this.selectedIndex].value,'_top')">
+                        <option value="">Навигация...</option>
+                        <option th:each="menu : ${menuItems}" th:value="${menu.url}" th:text="${menu.name}">Главная</option>
+                    </select>
+                </div>
+            </form>
+
+        </div>
+
+    </div><!-- End Header -->
+
+</body>
+</html>

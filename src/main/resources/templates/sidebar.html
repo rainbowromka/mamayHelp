@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <!-- Blog Sidebar
+    ================================================== -->
+    <div class="span4 sidebar" th:fragment="sidebar">
+
+        <!--Search-->
+        <section>
+            <div class="input-append">
+                <form action="#">
+                    <input id="appendedInputButton" size="16" type="text" placeholder="Поиск"><button class="btn" type="button"><i class="icon-search"></i></button>
+                </form>
+            </div>
+        </section>
+
+        <!--Category-->
+        <h5 class="title-bg">Категории</h5>
+        <div class="post-name-list">
+            <ul>
+                <li th:each="category : ${categories}"><a href="#" th:href="${category.url}"><i class="icon-plus-sign"></i><span th:text="${category.name}">Design</span></a></li>
+            </ul>
+        </div>
+
+        <!--Popular Posts-->
+        <h5 class="title-bg">Популярные посты</h5>
+        <ul class="popular-posts">
+            <li th:each="post : ${popularPosts}">
+                <a href="#" th:href="@{/blog(id=${post.id})}"><img src="" th:src="${post.tumbs2.content}" alt="Популярный пост"></a>
+                <h6>
+                    <a href="#" th:href="@{/blog(id=${post.id})}">
+                        <span th:text="${post.title}"></span>
+                    </a>
+                </h6>
+                <em>Опубликовано <span th:text="${post.posted}">09/01/15</span></em>
+            </li>
+        </ul>
+
+        <!--Tabbed Content-->
+        <h5 class="title-bg">Дополнительная информация</h5>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#about" data-toggle="tab">О сайте</a></li>
+            <li><a href="#tweets" data-toggle="tab">Твиты</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="about" th:utext="${about}">
+            </div>
+
+            <div class="tab-pane" id="tweets">
+                <ul>
+                    <li th:each="tweet : ${tweets}"><a href="#"><i class="icon-share-alt"></i><span th:text="${tweet.created}">08.06.2018</span></a>&nbsp;<span th:text="${tweet.messages}"> Ну вот уже сайт приобретает черты, скоро открытие</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!--Video Widget-->
+        <h5 class="title-bg">Случайное видео о Мамае</h5>
+        <iframe width="370" height="208" th:src="${randomVideo.videoUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+        <!--<iframe width="370" height="208" src="https://www.youtube.com/embed/-TKNdC2JPFo?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>-->
+    </div>
+
+</body>
+</html>

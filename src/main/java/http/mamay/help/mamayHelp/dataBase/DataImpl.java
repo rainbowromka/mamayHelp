@@ -17,8 +17,8 @@ import http.mamay.help.mamayHelp.dataBase.userManager.model.User;
 import http.mamay.help.mamayHelp.dataBase.userManager.service.UserRepository;
 import http.mamay.help.mamayHelp.dataBase.userReviewManager.model.UserReview;
 import http.mamay.help.mamayHelp.dataBase.userReviewManager.repository.UserReviewRepository;
-import http.mamay.help.mamayHelp.sliderItemManager.model.SliderItem;
-import http.mamay.help.mamayHelp.sliderItemManager.service.SliderItemRepository;
+import http.mamay.help.mamayHelp.dataBase.sliderItemManager.model.SliderItem;
+import http.mamay.help.mamayHelp.dataBase.sliderItemManager.service.SliderItemRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +43,6 @@ public class DataImpl {
     UserRepository userRepository;
     @Autowired
     BlogTagRepository blogTagRepository;
-//    @Autowired
-//    BlogRecordRepository blogRecordRepository;
     @Autowired
     BlogRecordService blogRecordService;
     @Autowired
@@ -66,81 +64,39 @@ public class DataImpl {
     @Autowired
     VideoContentRepository videoContentRepository;
 
-    List<MenuItem> menuItems = new ArrayList<>();
-    List<SliderItem> sliders = new ArrayList<>();
-    List<BlogTag> blogTags = new ArrayList<>();
-
-    List<BlogRecord> top5blogs = new ArrayList<>();
+//    @Getter @Setter
+//    List<MenuItem> menuItems = new ArrayList<>();
+//    @Getter @Setter
+//    List<SliderItem> sliders = new ArrayList<>();
+//    List<BlogTag> blogTags = new ArrayList<>();
+//    @Getter @Setter
+//    List<BlogRecord> top5blogs = new ArrayList<>();
+//    @Getter @Setter
+//    Iterable<UserReview> userReviews = new ArrayList<>();
+//    @Getter @Setter
+//    private Page<BlogRecord> blogs;
+//    @Getter @Setter
+//    int curPage;
+//   @Getter @Setter
+//    private List<BlogPage> blogPages;
+//    @Getter @Setter
+//    private Iterable<Category> categories = new ArrayList<>();
+//    @Getter @Setter
+//    private List<BlogRecord> popularPosts = new ArrayList<>();
+//    @Getter @Setter
+//    private Iterable<Tweet> tweets = new ArrayList<>();
+//    @Getter @Setter
+//    private Iterable<Tweet> last3Tweets = new ArrayList<>();
     @Getter @Setter
-    Iterable<UserReview> userReviews = new ArrayList<>();
-    @Getter @Setter
-    private Page<BlogRecord> blogs;
-    @Getter @Setter
-    int curPage;
-    // TODO: 22.06.2018 Надо сделать загрузку последних трех блогов
-    @Getter @Setter
-    private List<BlogRecord> last3Blogs = new ArrayList<>();
-
-    @Getter @Setter
-    private List<BlogPage> blogPages;
-    @Getter @Setter
-    private Iterable<Category> categories = new ArrayList<>();
-    private List<BlogRecord> popularPosts = new ArrayList<>();
-    @Getter @Setter
-    private Iterable<Tweet> tweets = new ArrayList<>();
-    @Getter @Setter
-    private Iterable<Tweet> last3Tweets = new ArrayList<>();
     private String about;
-    @Getter @Setter
-    private List<VideoContent> videos = new ArrayList<>();
+//    @Getter @Setter
+//    private List<VideoContent> videos = new ArrayList<>();
 
-
-    public void setPopularPosts(List<BlogRecord> popularPosts) {
-        this.popularPosts = popularPosts;
-    }
-
-    public List<BlogRecord> getPopularPosts() {
-
-        return popularPosts;
-    }
-
-    public List<SliderItem> getSliders() {
-        return sliders;
-    }
-
-    public void setSliders(List<SliderItem> sliders) {
-        this.sliders = sliders;
-    }
-
-    public List<MenuItem> getMenuItems() {
-        return menuItems;
-    }
-
-    public void setMenuItems(List<MenuItem> menuItems) {
-        this.menuItems = menuItems;
-    }
-
-    public List<BlogRecord> getTop5blogs() {
-        return top5blogs;
-    }
-
-    public void setTop5blogs(List<BlogRecord> top5blogs) {
-        this.top5blogs = top5blogs;
-    }
-
-    public String getAbout() {
-        return about;
-    }
-
-    public void setAbout(String about) {
-        this.about = about;
-    }
-
-    public VideoContent getRandomVideo() {
-        videos = videoContentRepository.findAll();
-        int e = (int) (Math.random() * (videos.size() - 1));
-        return videos.get(e);
-    }
+//    public VideoContent getRandomVideo() {
+//        videos = videoContentRepository.findAll();
+//        int e = (int) (Math.random() * (videos.size() - 1));
+//        return videos.get(e);
+//    }
 
     @PostConstruct
     public void iniDataImpl(){
@@ -149,25 +105,21 @@ public class DataImpl {
         Создаем в базе данных запись о меню
  */
         menuItemRepositary.deleteAll();
-        menuItemRepositary.save(new MenuItem("Главная", "index.html"));
+        menuItemRepositary.save(new MenuItem("Главная", "/"));
         menuItemRepositary.save(new MenuItem("Справочник", "guide.html"));
         menuItemRepositary.save(new MenuItem("Карта", "map.html"));
         menuItemRepositary.save(new MenuItem("Галлерея", "picture.html"));
         menuItemRepositary.save(new MenuItem("Контакты", "contact.html"));
-        menuItems.clear();
-        for (MenuItem menuItem: menuItemRepositary.findAll()){
-            menuItems.add(menuItem);
-        }
 /*
         Запись о слайдере
  */
         sliderItemRepository.deleteAll();
         sliderItemRepository.save(new SliderItem("img/gallery/slide2.jpg", "gallery-single.htm"));
         sliderItemRepository.save(new SliderItem("img/gallery/slide1.jpg", "gallery-single.htm"));
-        sliders.clear();
-        for (SliderItem sliderItem: sliderItemRepository.findAll()){
-            sliders.add(sliderItem);
-        }
+//        sliders.clear();
+//        for (SliderItem sliderItem: sliderItemRepository.findAll()){
+//            sliders.add(sliderItem);
+//        }
 
         userRepository.deleteAll();
         User newUser = new User("Roman", "broken_mouse@mail.ru");
@@ -509,12 +461,12 @@ public class DataImpl {
 
 
 //        blogs = blogRecordService.findAll();
-        blogs = blogRecordService.findByOrderByPostedDesc(0, 5);
-        curPage = blogRecordService.getCurPage();
-        blogPages = blogRecordService.getBlogPages();
+//        blogs = blogRecordService.findByOrderByPostedDesc(0, 5);
+//        curPage = blogRecordService.getCurPage();
+//        blogPages = blogRecordService.getBlogPages();
 
-        top5blogs = blogRecordService.findTop5ByOrderByRatingDescNotLazy();
-        popularPosts = blogRecordService.findTop5ByOrderByRatingDescNotLazy();
+//        top5blogs = blogRecordService.findTop5ByOrderByRatingDescNotLazy();
+//        popularPosts = blogRecordService.findTop5ByOrderByRatingDescNotLazy();
 
 
 
@@ -528,7 +480,7 @@ public class DataImpl {
                 "энергией, риск - очищает мой разум, это особенность любого мужчины, здесь я наедине с природой. Ну и " +
                 "конечно же риск должен быть оправдан. Мы не лезем на рожон, изучаем горы. Уважаем природу, следим за чистотой."));
 
-        userReviews =  userReviewRepository.findAll();
+//        userReviews =  userReviewRepository.findAll();
 
 
 
@@ -538,7 +490,7 @@ public class DataImpl {
         categoriesList.add(new Category("Галлерея", "picture.html"));
         categoriesList.add(new Category("Контакты", "contact.html"));
         categoryRepository.saveAll(categoriesList);
-        categories = categoryRepository.findAll();
+//        categories = categoryRepository.findAll();
 
 
         List<Tweet> tweetList = new ArrayList<>();
@@ -548,10 +500,8 @@ public class DataImpl {
         tweetList.add(new Tweet(LocalDate.of(2018,6,1), " Правая колонка завершена"));
         tweetList.add(new Tweet(LocalDate.of(2018,4,30), " Раздел блоги завершен, оформляем остальные разделы"));
         tweetRepository.saveAll(tweetList);
-        tweets = tweetRepository.findTop5ByOrderByCreatedDesc();
-        last3Tweets = tweetRepository.findTop3ByOrderByCreatedDesc();
-
-// TODO: 22.06.2018 Определить количество страниц
+//        tweets = tweetRepository.findTop5ByOrderByCreatedDesc();
+//        last3Tweets = tweetRepository.findTop3ByOrderByCreatedDesc();
 
         about  = "<p>Задача этого сайта сводится к систематизаци и наведения порядка в экстремальном спорте (в частности во " +
                 "фрирайде). Цель рассказать о уникальном месте. Заставить вас проникнуться нашим миром. И уже когда вы будете " +

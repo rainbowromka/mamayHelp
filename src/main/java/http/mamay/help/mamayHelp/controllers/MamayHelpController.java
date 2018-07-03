@@ -1,8 +1,16 @@
 package http.mamay.help.mamayHelp.controllers;
 
 import http.mamay.help.mamayHelp.dataBase.DataImpl;
+import http.mamay.help.mamayHelp.dataBase.VideoContentManager.service.VideoContentService;
+import http.mamay.help.mamayHelp.dataBase.blogmanager.model.BlogRecord;
+import http.mamay.help.mamayHelp.dataBase.blogmanager.service.BlogRecordService;
+import http.mamay.help.mamayHelp.dataBase.categoryManager.repository.CategoryRepository;
+import http.mamay.help.mamayHelp.dataBase.menuItemManager.service.MenuItemRepositary;
+import http.mamay.help.mamayHelp.dataBase.sliderItemManager.service.SliderItemRepository;
+import http.mamay.help.mamayHelp.dataBase.tweetManager.repository.TweetRepository;
 import http.mamay.help.mamayHelp.dataBase.userManager.model.User;
 import http.mamay.help.mamayHelp.dataBase.userManager.service.UserRepository;
+import http.mamay.help.mamayHelp.dataBase.userReviewManager.repository.UserReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +26,21 @@ public class MamayHelpController {
     private UserRepository userRepository;
     @Autowired
     private DataImpl dataImpl;
+    @Autowired
+    private BlogRecordService blogRecordService;
+    @Autowired
+    private MenuItemRepositary menuItemRepositary;
+    @Autowired
+    private SliderItemRepository sliderItemRepository;
+    @Autowired
+    private UserReviewRepository userReviewRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
+    private TweetRepository tweetRepository;
+    @Autowired
+    private VideoContentService videoContentService;
+
 
     @GetMapping("/greeting")
     public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
@@ -26,24 +49,43 @@ public class MamayHelpController {
     }
 
     @GetMapping("/")
-    public String indexing(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
+    public String indexing(@RequestParam(name="page", required=false, defaultValue="0") int page, Model model) {
         model.addAttribute("mamayWelcome", "Мамай - это уникальное место, рассположенно в горах недалеко от оз. " +
                 "Байкал. Это место посещают каждый год зимой фрирайдеры из россии и зарубежья");
-        model.addAttribute("menuItems", dataImpl.getMenuItems());
-        model.addAttribute("sliders", dataImpl.getSliders());
-        model.addAttribute("topBlogs", dataImpl.getTop5blogs());
-        model.addAttribute("userReviews", dataImpl.getUserReviews());
-        model.addAttribute("blogs", dataImpl.getBlogs());
-        model.addAttribute("last3blogs", dataImpl.getLast3Blogs());
-        model.addAttribute("categories", dataImpl.getCategories());
-        model.addAttribute("popularPosts", dataImpl.getPopularPosts());
-        model.addAttribute("tweets",dataImpl.getTweets());
-        model.addAttribute("last3tweets", dataImpl.getLast3Tweets());
+        model.addAttribute("menuItems", menuItemRepositary.findAll());
+        model.addAttribute("curMenu", "Главная");
+        model.addAttribute("sliders", sliderItemRepository.findAll());
+        model.addAttribute("topBlogs", blogRecordService.findTop5ByOrderByRatingDescNotLazy());
+        model.addAttribute("userReviews", userReviewRepository.findAll());
+        model.addAttribute("blogs", blogRecordService.findByOrderByPostedDesc(page, 5));
+        model.addAttribute("blogPages", blogRecordService.getBlogPages());
+        model.addAttribute("curPage", blogRecordService.getCurPage());
+
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("popularPosts", blogRecordService.findTop5ByOrderByRatingDescNotLazy());
+        model.addAttribute("tweets",tweetRepository.findTop5ByOrderByCreatedDesc());
+        model.addAttribute("last3tweets", tweetRepository.findTop5ByOrderByCreatedDesc());
         model.addAttribute("about", dataImpl.getAbout());
-        model.addAttribute("randomVideo", dataImpl.getRandomVideo());
-        model.addAttribute("curPage", dataImpl.getCurPage());
-        model.addAttribute("blogPages", dataImpl.getBlogPages());
+        model.addAttribute("randomVideo", videoContentService.getRandomVideo());
         return "index";
+    }
+
+    @GetMapping("/blog")
+    public String blog(@RequestParam(name = "id", required = false, defaultValue = "-1") long id, Model model) {
+        model.addAttribute("menuItems", menuItemRepositary.findAll());
+        model.addAttribute("curMenu", "");
+        model.addAttribute("blog", blogRecordService.findById(id));
+
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("popularPosts", blogRecordService.findTop5ByOrderByRatingDescNotLazy());
+        model.addAttribute("tweets",tweetRepository.findTop5ByOrderByCreatedDesc());
+        model.addAttribute("last3tweets", tweetRepository.findTop5ByOrderByCreatedDesc());
+        model.addAttribute("about", dataImpl.getAbout());
+        model.addAttribute("randomVideo", videoContentService.getRandomVideo());
+        model.addAttribute("topBlogs", blogRecordService.findTop5ByOrderByRatingDescNotLazy());
+        model.addAttribute("comments", null);
+        model.addAttribute("aboutAuthor", null);
+        return "blog";
     }
 
 

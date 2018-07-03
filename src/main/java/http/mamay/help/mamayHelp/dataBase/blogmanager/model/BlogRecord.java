@@ -23,8 +23,10 @@ public class BlogRecord {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Getter @Setter
+    private Long id;
     @Column(name = "title")
+    @Getter @Setter
     private String title;
     @Column(name = "posted")
     @Getter @Setter
@@ -57,22 +59,6 @@ public class BlogRecord {
     private BlogUrl urlSingle;
     @Getter @Setter
     private int rating;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public User getAuthor() {
         return author;
@@ -110,7 +96,5 @@ public class BlogRecord {
         return tumbs2;
     }
 
-    public void setTumbs2(BlogTumbs tumbs2) {
-        this.tumbs2 = tumbs2;
-    }
+    public void setTumbs2(BlogTumbs tumbs2) {this.tumbs2 = tumbs2;}
 }

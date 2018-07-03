@@ -1,4 +1,4 @@
-package http.mamay.help.mamayHelp.sliderItemManager.model;
+package http.mamay.help.mamayHelp.dataBase.sliderItemManager.model;
 
 import javax.persistence.*;
 

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Footer Area
+    ================================================== -->
+
+<div class="footer-container" th:fragment="footer"><!-- Begin Footer -->
+    <div class="container">
+        <div class="row footer-row">
+            <div class="span3 footer-col">
+                <h5>Контакты</h5>
+                <img src="img/mamay_logo3.png" alt="Piccolo" /><br /><br />
+                <address>
+                    <strong>Мы находимся</strong><br />
+                    Россия, г. Иркутск
+                </address>
+                <ul class="social-icons">
+                    <li><a href="#" class="social-icon vkontakte"></a></li>
+                    <li><a href="#" class="social-icon instagram"></a></li>
+                </ul>
+            </div>
+            <div class="span3 footer-col">
+                <h5>Последние твиты</h5>
+                <ul>
+                    <li th:each="tweet : ${last3tweets}"><a href="#" th:text="${tweet.created}"></a>&nbsp;<span th:text="${tweet.messages}"></span></li>
+                </ul>
+
+            </div>
+            <div class="span3 footer-col">
+                <h5>Последние посты</h5>
+                <ul class="post-list">
+                    <li th:each="blog : ${topBlogs}"><a href="#" th:href="@{/blog(id=${blog.id})}" th:text="${blog.title}">Lorem ipsum dolor sit amet</a></li>
+                </ul>
+            </div>
+            <div class="span3 footer-col">
+                <h5>Flickr Photos</h5>
+                <ul class="img-feed">
+                    <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
+                    <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
+                    <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
+                    <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
+                    <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
+                    <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
+                    <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
+                    <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
+                    <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
+                    <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
+                    <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
+                    <li><a href="#"><img src="img/gallery/flickr-img-1.jpg" alt="Image Feed"></a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row"><!-- Begin Sub Footer -->
+            <div class="span12 footer-col footer-sub">
+                <div class="row no-margin">
+                    <div class="span6"><span class="left">Copyright 2012 Piccolo Theme. All rights reserved.</span></div>
+                    <div class="span6">
+                            <span class="right">
+                            <a href="#">Home</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Features</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Gallery</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Blog</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Contact</a>
+                            </span>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End Sub Footer -->
+
+    </div>
+</div><!-- End Footer -->
+
+</body>
+</html>
